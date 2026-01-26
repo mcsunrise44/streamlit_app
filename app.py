@@ -22,3 +22,13 @@ df.drop('(F005-05-2-002)品目 補助コード',axis=1,inplace=True)
 df.drop('作付面積、収穫量及び出荷量',axis=1,inplace=True)
 
 st.dataframe(df)
+
+df.columns = df.columns.str.replace('\ufeff', '', regex=False).str.strip()
+
+st.bar_chart(
+    df,
+    x="年次",
+    y="収穫量【t】",
+    color="(F005-05-2-002)品目",
+    stack=False
+)
