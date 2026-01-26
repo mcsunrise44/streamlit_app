@@ -9,3 +9,6 @@ with st.sidebar:
     st.subheader('抽出条件')
     a = st.multiselect('野菜の種類を選択してください',
                        df['(F005-05-2-002)品目'])
+    st.subheader('色分け')    
+    color = st.selectbox('分類を選択してください',
+                      ['作付面積【ha】', '収穫量【t】', '出荷量【t】'])  
