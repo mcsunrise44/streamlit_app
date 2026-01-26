@@ -1,22 +1,24 @@
 import streamlit as st
 import pandas as pd
 
-st.title('野菜収穫量/出荷量')
+st.title('2023年度野菜別収穫量/出荷量')
 
 df = pd.read_csv(
     'FEH_00500215_260126105748.csv',
-    sep='\t',
-    encoding='utf-8'
+    encoding='utf-8-sig'
 )
 
 with st.sidebar:
     st.subheader('抽出条件')
-    vesitable_series = st.multiselect('野菜の種類を選択してください',
+    vesitable_series = st.selectbox('野菜の種類を選択してください',
                        df['品目'])
-    st.subheader('色分け')    
+    st.subheader('色分け')
     color = st.selectbox('分類を選択してください',
                       ['作付面積【ha】', '収穫量【t】', '出荷量【t】'])
     
-df = df[df['品目'].isin(vesitable_series)]
+df = df[df['品目']==(vesitable_series)]
+df.drop('(F005-05-2-002)品目 コード',axis=1,inplace=True)
+df.drop('(F005-05-2-002)品目 補助コード',axis=1,inplace=True)
+df.drop('作付面積、収穫量及び出荷量',axis=1,inplace=True)
 
 st.dataframe(df)
