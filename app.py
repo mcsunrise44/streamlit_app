@@ -28,7 +28,7 @@ df = df[['男女別', '全国・都道府県',
 
 df.columns = df.columns.str.replace('\ufeff', '', regex=False).str.strip()
 
-st.header(f'{prefectures}の男女別人口推移')
+st.header(f'{prefectures}の男女別人口推移（{chart_type}）')
 year_cols = ['2005年','2010年','2015年','2020年',
              '2021年','2022年','2023年','2024年']
 for c in year_cols:
@@ -43,19 +43,10 @@ df_long = df.melt(
 
 df_long = df_long[df_long['男女別'] != '男女計']
 
-st.dataframe(df)
+st.dataframe(df_long)
 
-st.bar_chart(
-    df_long,
-    x='年',
-    y='人口（人）',
-    color='男女別'
-)
+years = year_cols
+male = df_long[df_long['男女別'] == '男']['人口'].tolist()
+female = df_long[df_long['男女別'] == '女']['人口'].tolist()
 
-st.line_chart(
-    df_long,
-    x='年',
-    y='人口（人）',
-    color='男女別'
-)
-
+series_type = 'bar' if chart_type == '棒グラフ' else 'line'
