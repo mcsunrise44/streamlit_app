@@ -41,6 +41,9 @@ pivot_df = df_long.pivot_table(
     values='population',
     aggfunc='sum'
 )
+
+df_long = df_long[df_long['男女別'] != '男女計']
+
 st.bar_chart(
     df_long,
     x='year',
