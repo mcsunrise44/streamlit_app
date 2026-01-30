@@ -4,7 +4,7 @@ from streamlit_echarts import st_echarts
 
 st.title('人口推計 各年10月1日現在人口 令和２年国勢調査基準 統計表')
 
-st.header('都道府県別総人口')
+st.header('都道府県別 男女別 総人口推移表')
 df = pd.read_csv(
     'FEH_00200524_260130121431.csv',
     encoding='utf-8-sig'
@@ -28,7 +28,6 @@ df = df[['男女別','全国・都道府県',
 
 df.columns = df.columns.str.replace('\ufeff', '', regex=False).str.strip()
 
-st.header(f'{prefectures}の男女別人口推移（{chart_type}）')
 year_cols = ['2005年','2010年','2015年','2020年',
              '2021年','2022年','2023年','2024年']
 for c in year_cols:
@@ -44,6 +43,8 @@ df_long = df.melt(
 df_long = df_long[df_long['男女別'] != '男女計']
 
 st.dataframe(df_long)
+
+st.header(f'{prefectures}の男女別人口推移（{chart_type}）')
 
 years = year_cols
 male = df_long[df_long['男女別'] == '男']['人口(千人)'].tolist()
