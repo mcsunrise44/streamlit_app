@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-st.title('人口推計 各年10月1日現在人口 令和２年国勢調査基準 統計表 ')
+st.title('人口推計 各年10月1日現在人口 令和２年国勢調査基準 統計表')
 
 st.header('都道府県別総人口')
 df = pd.read_csv(
@@ -46,6 +46,13 @@ pivot_df = df_long.pivot_table(
 df_long = df_long[df_long['男女別'] != '男女計']
 
 st.bar_chart(
+    df_long,
+    x='年',
+    y='人口（人）',
+    color='男女別'
+)
+
+st.line_chart(
     df_long,
     x='年',
     y='人口（人）',
