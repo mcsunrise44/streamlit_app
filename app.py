@@ -83,3 +83,38 @@ st_echarts(option)
 
 st.divider()
 
+oldest_year = '2005年'
+latest_year = '2024年'
+
+male_2005 = df_long[
+    (df_long['男女別'] == '男') & (df_long['年'] == oldest_year)
+]['人口(千人)'].iloc[0]
+
+male_2024 = df_long[
+    (df_long['男女別'] == '男') & (df_long['年'] == latest_year)
+]['人口(千人)'].iloc[0]
+
+female_2005 = df_long[
+    (df_long['男女別'] == '女') & (df_long['年'] == oldest_year)
+]['人口(千人)'].iloc[0]
+
+female_2024 = df_long[
+    (df_long['男女別'] == '女') & (df_long['年'] == latest_year)
+]['人口(千人)'].iloc[0]
+
+male_rate_2005_2024 = (male_2024 - male_2005) / male_2005 * 100
+female_rate_2005_2024 = (female_2024 - female_2005) / female_2005 * 100
+
+st.header('人口増減率の比較')
+
+col1, col2 = st.columns(2)
+
+col1.metric(
+    '2005年度と2024年度の増減率（男）',
+    f'{male_rate_2005_2024:.2f} %'
+)
+
+col2.metric(
+    '2005年度と2024年度の増減率（女）',
+    f'{female_rate_2005_2024:.2f} %'
+)
