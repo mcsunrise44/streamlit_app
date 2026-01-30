@@ -1,8 +1,9 @@
 import streamlit as st
 import pandas as pd
 
-st.title('都道府県別総人口')
+st.title('人口推計 各年10月1日現在人口 令和２年国勢調査基準 統計表 ')
 
+st.header('都道府県別総人口')
 df = pd.read_csv(
     'FEH_00200524_260130121431.csv',
     encoding='utf-8-sig'
@@ -10,10 +11,10 @@ df = pd.read_csv(
 
 with st.sidebar:
     st.subheader('抽出条件')
-    population = st.selectbox('都道府県を選択してください',
+    prefectures = st.selectbox('都道府県を選択してください',
                               df['全国・都道府県'].unique())
 
-df = df[df['全国・都道府県'] == population]
+df = df[df['全国・都道府県'] == prefectures]
 
 df = df[['男女別', '全国・都道府県', 
          '2005年', '2010年', '2015年', '2020年',
@@ -22,7 +23,7 @@ df = df[['男女別', '全国・都道府県',
 df.columns = df.columns.str.replace('\ufeff', '', regex=False).str.strip()
 st.dataframe(df)
 
-st.subheader('男女別人口推移')
+st.header(f'{prefectures}の男女別人口推移')
 year_cols = ['2005年','2010年','2015年','2020年',
              '2021年','2022年','2023年','2024年']
 for c in year_cols:
