@@ -44,6 +44,8 @@ df_long = df_long[df_long['男女別'] != '男女計']
 
 st.dataframe(df_long)
 
+st.divider()
+
 st.header(f'{prefectures}の男女別人口推移（{chart_type}）')
 
 years = year_cols
@@ -78,3 +80,6 @@ option = {
 }
 
 st_echarts(option)
+
+st.divider()
+
