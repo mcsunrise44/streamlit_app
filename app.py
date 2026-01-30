@@ -22,9 +22,9 @@ with st.sidebar:
 
 df = df[df['全国・都道府県'] == prefectures]
 
-df = df[['男女別', '全国・都道府県', 
-         '2005年', '2010年', '2015年', '2020年',
-         '2021年', '2022年', '2023年', '2024年']]
+df = df[['男女別','全国・都道府県',
+         '2005年','2010年','2015年','2020年',
+         '2021年','2022年','2023年','2024年']]
 
 df.columns = df.columns.str.replace('\ufeff', '', regex=False).str.strip()
 
@@ -35,10 +35,10 @@ for c in year_cols:
     df[c] = df[c].str.replace(',', '').astype(int)
 
 df_long = df.melt(
-    id_vars=['全国・都道府県', '男女別'],
+    id_vars=['全国・都道府県','男女別'],
     value_vars=year_cols,
     var_name='年',
-    value_name='人口（人）'
+    value_name='人口(千人)'
 )
 
 df_long = df_long[df_long['男女別'] != '男女計']
@@ -46,7 +46,34 @@ df_long = df_long[df_long['男女別'] != '男女計']
 st.dataframe(df_long)
 
 years = year_cols
-male = df_long[df_long['男女別'] == '男']['人口'].tolist()
-female = df_long[df_long['男女別'] == '女']['人口'].tolist()
+male = df_long[df_long['男女別'] == '男']['人口(千人)'].tolist()
+female = df_long[df_long['男女別'] == '女']['人口(千人)'].tolist()
 
 series_type = 'bar' if chart_type == '棒グラフ' else 'line'
+
+option = {
+    'tooltip': {'trigger':'axis'},
+    'legend': {'data':['男','女']},
+    'xAxis': {
+        'type': 'category',
+        'data': years,
+    },
+    'yAxis': {
+        'type': 'value',
+        'name': '人口(千人)'
+    },
+    'series': [
+        {
+            'name': '男',
+            'type': series_type,
+            'data': male
+        },
+        {
+            'name': '女',
+            'type': series_type,
+            'data': female
+        }
+    ]
+}
+
+st_echarts(option)
