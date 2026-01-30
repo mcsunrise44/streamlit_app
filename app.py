@@ -1,35 +1,23 @@
 import streamlit as st
 import pandas as pd
 
-st.title('2023年度野菜別収穫量/出荷量')
+st.title('都道府県，男女別人口－総人口，日本人人口')
 
 df = pd.read_csv(
-    'FEH_00500215_260126105748.csv',
+    'FEH_00200524_260130121431.csv',
     encoding='utf-8-sig'
 )
 
 with st.sidebar:
     st.subheader('抽出条件')
-    vesitable_series = st.multiselect('野菜を選択してください（複数選択可）',
-                       df['品目'].unique())
+    vesitable_series = st.multiselect('条件を選択してください（複数選択可）',
+                       df['全国・都道府県 コード'].unique())
     st.subheader('色分け')
     color = st.selectbox('分類を選択してください',
-                      ['作付面積【ha】', '収穫量【t】', '出荷量【t】'])
+                      ['男女別 コード','人口 コード','2005年','2010年','2015年','2020年','2021年','2022年','2023年','2024年'])
     
-df = df[df['品目'].isin(vesitable_series)]
-df.drop('(F005-05-2-002)品目 コード',axis=1,inplace=True)
-df.drop('(F005-05-2-002)品目 補助コード',axis=1,inplace=True)
-df.drop('作付面積、収穫量及び出荷量',axis=1,inplace=True)
-
-st.dataframe(df)
+df = df[df['全国・都道府県 コード'].isin(vesitable_series)]
 
 df.columns = df.columns.str.replace('\ufeff', '', regex=False).str.strip()
-df = df.sort_values('収穫量【t】', ascending=False)
+st.dataframe(df)
 
-st.bar_chart(
-    df,
-    x="出荷量【t】",
-    y="収穫量【t】",
-    color="品目",
-    stack=False
-)
