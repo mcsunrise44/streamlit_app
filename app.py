@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-st.title('都道府県別・男女別総人口/日本人人口')
+st.title('都道府県別・男女別総人口')
 
 df = pd.read_csv(
     'FEH_00200524_260130121431.csv',
@@ -10,24 +10,40 @@ df = pd.read_csv(
 
 with st.sidebar:
     st.subheader('抽出条件')
-    vesitable_series = st.multiselect('都道府県を選択してください（複数選択可）',
-                       df['全国・都道府県'].unique())
+    population = st.selectbox('都道府県を選択してください',
+                              df['全国・都道府県'])
 
-df = df[df['全国・都道府県'].isin(vesitable_series)]
+df = df[df['全国・都道府県'] == population]
 
-df.drop('表章項目 コード',axis=1,inplace=True)
-df.drop('表章項目 補助コード',axis=1,inplace=True)
-df.drop('表章項目',axis=1,inplace=True)
-df.drop('男女別 コード',axis=1,inplace=True)
-df.drop('男女別 補助コード',axis=1,inplace=True)
-df.drop('人口 コード',axis=1,inplace=True)
-df.drop('人口 補助コード',axis=1,inplace=True)
-df.drop('全国・都道府県 コード',axis=1,inplace=True)
-df.drop('全国・都道府県 補助コード',axis=1,inplace=True)
-df.drop('/時間軸（年）',axis=1,inplace=True)
+df = df[['男女別', '全国・都道府県', 
+         '2005年', '2010年', '2015年', '2020年',
+         '2021年', '2022年', '2023年', '2024年']]
 
 df.columns = df.columns.str.replace('\ufeff', '', regex=False).str.strip()
 st.dataframe(df)
 
-st.subheader('都道府県別 人口')
-st.bar_chart(df.T)
+st.subheader('男女別人口')
+year_cols = ['2005年','2010年','2015年','2020年',
+             '2021年','2022年','2023年','2024年']
+for c in year_cols:
+    df[c] = df[c].str.replace(',', '').astype(int)
+
+df_long = df.melt(
+    id_vars=['全国・都道府県', '男女別'],
+    value_vars=year_cols,
+    var_name='year',
+    value_name='population'
+)
+
+pivot_df = df_long.pivot_table(
+    index=['全国・都道府県', '男女別'],
+    columns='year',
+    values='population',
+    aggfunc='sum'
+)
+st.bar_chart(
+    df_long,
+    x='year',
+    y='population',
+    color='男女別'
+)
