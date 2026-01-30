@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-st.title('都道府県，男女別人口－総人口，日本人人口')
+st.title('都道府県別・男女別総人口/日本人人口')
 
 df = pd.read_csv(
     'FEH_00200524_260130121431.csv',
@@ -10,7 +10,7 @@ df = pd.read_csv(
 
 with st.sidebar:
     st.subheader('抽出条件')
-    vesitable_series = st.multiselect('条件を選択してください（複数選択可）',
+    vesitable_series = st.multiselect('都道府県を選択してください（複数選択可）',
                        df['全国・都道府県'].unique())
 
 df = df[df['全国・都道府県'].isin(vesitable_series)]
@@ -29,3 +29,5 @@ df.drop('/時間軸（年）',axis=1,inplace=True)
 df.columns = df.columns.str.replace('\ufeff', '', regex=False).str.strip()
 st.dataframe(df)
 
+st.subheader('都道府県別 人口')
+st.bar_chart(df.T)
