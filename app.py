@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from streamlit_echarts import st_echarts
 
-st.title('人口推計 各年10月1日現在人口 令和２年国勢調査基準 統計表')
+st.title('都道府県別・男女別人口推移と増減率分析用Webアプリ')
 
 df = pd.read_csv(
     'FEH_00200524_260130121431.csv',
